@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const date = require(__dirname + '/date.js');
 
 const app = express();
 
@@ -9,23 +10,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 let items = ['buy food', 'cook food', 'eat food'];
+let workItems = [];
 
 app.get('/', function(req, res) {
-    // tests whether today is a weekend
-    let today = new Date();
-    let options = {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long'
-    };
-
-    res.render('list', { day: today.toLocaleDateString('en-US', options), items: items });
+    res.render('list', { listTitle: date.getDay(), items: items });
 });
 
 app.post('/', function(req, res) {
-    console.log(req.body.newToDo);
-    items.push(req.body.newToDo);
-    res.redirect('/');
+    console.log(req.body);
+
+    let item = req.body.newToDo;
+
+    if (req.body.submitButton === 'Work') {
+        workItems.push(req.body.newToDo);
+        res.redirect('/work');
+    } else {
+        items.push(req.body.newToDo);
+        res.redirect('/');
+    }
+});
+
+app.get('/work', function(req, res) {
+    res.render('list', { listTitle: 'Work', items: workItems });
+});
+
+app.get('/about', function(req, res) {
+    res.render('about');
 });
 
 
