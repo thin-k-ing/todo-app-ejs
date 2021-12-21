@@ -13,7 +13,7 @@ let items = ['buy food', 'cook food', 'eat food'];
 let workItems = [];
 
 app.get('/', function(req, res) {
-    res.render('list', { listTitle: date.getDay(), items: items });
+    res.render('list', { listTitle: date.getDate(), items: items });
 });
 
 app.post('/', function(req, res) {
